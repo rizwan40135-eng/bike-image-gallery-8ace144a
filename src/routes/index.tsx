@@ -146,13 +146,22 @@ function CarGalleryPage() {
               key={f}
               onClick={() => setFilter(f)}
               aria-pressed={filter === f}
-              className={`rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-widest transition-colors ${
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-widest transition-all ${
                 filter === f
-                  ? "border-primary bg-primary text-primary-foreground"
+                  ? "border-primary/50 bg-primary/10 text-primary shadow-glow"
                   : "border-border bg-card text-muted-foreground hover:text-foreground"
               }`}
             >
               {f}
+              <span
+                className={`inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-bold ${
+                  filter === f
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {filterCounts[f]}
+              </span>
             </button>
           ))}
         </div>
