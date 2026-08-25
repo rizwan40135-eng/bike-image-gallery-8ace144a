@@ -1,37 +1,45 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
-import hero from "@/assets/bike-hero.jpg";
-import bike1 from "@/assets/bike-1.jpg";
-import bike2 from "@/assets/bike-2.jpg";
-import bike3 from "@/assets/bike-3.jpg";
-import bike4 from "@/assets/bike-4.jpg";
-import bike5 from "@/assets/bike-5.jpg";
-import bike6 from "@/assets/bike-6.jpg";
+import hero from "@/assets/car-hero.jpg";
+import car1 from "@/assets/car-1.jpg";
+import car2 from "@/assets/car-2.jpg";
+import car3 from "@/assets/car-3.jpg";
+import car4 from "@/assets/car-4.jpg";
+import car5 from "@/assets/car-5.jpg";
+import car6 from "@/assets/car-6.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Bike Images Gallery | Moto & Cycle Photo Collection" },
+      { title: "Car Images Gallery | Automotive Photo Collection" },
       {
         name: "description",
         content:
-          "Browse a curated gallery of high-resolution bike images: superbikes, cafe racers, mountain bikes, road bicycles and city e-bikes.",
+          "Browse a curated gallery of high-resolution car images: sports cars, classics, off-roaders, EVs, city cars and engine details.",
       },
-      { property: "og:title", content: "Bike Images Gallery" },
+      { property: "og:title", content: "Car Images Gallery" },
       {
         property: "og:description",
         content:
-          "A curated collection of high-resolution motorcycle and bicycle photography, filterable by category.",
+          "A curated collection of high-resolution automotive photography, filterable by category.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: BikeGalleryPage,
+  component: CarGalleryPage,
 });
 
-type Category = "Motorcycle" | "Bicycle" | "Detail";
+type Category =
+  | "Sports"
+  | "Classic"
+  | "Off-Road"
+  | "Electric"
+  | "Urban"
+  | "Detail";
 
-type Bike = {
+type Car = {
   src: string;
   title: string;
   caption: string;
@@ -39,55 +47,63 @@ type Bike = {
   span?: boolean;
 };
 
-const bikes: Bike[] = [
+const cars: Car[] = [
   {
-    src: bike1,
-    title: "Midnight Apex",
-    caption: "Matte black superbike on wet asphalt",
-    category: "Motorcycle",
+    src: car1,
+    title: "Midnight Aero",
+    caption: "Matte black supercar on rain-soaked city streets",
+    category: "Sports",
     span: true,
   },
   {
-    src: bike2,
-    title: "Coast Runner",
-    caption: "Cafe racer at golden hour",
-    category: "Motorcycle",
+    src: car2,
+    title: "Desert V8",
+    caption: "Classic muscle car bathed in golden-hour light",
+    category: "Classic",
   },
   {
-    src: bike3,
-    title: "Dust Line",
-    caption: "Trail jump through backlit pines",
-    category: "Bicycle",
+    src: car3,
+    title: "Dune Breaker",
+    caption: "Off-roader launching over sunlit sand dunes",
+    category: "Off-Road",
   },
   {
-    src: bike4,
-    title: "Carbon Study",
-    caption: "Road racer in studio rim light",
-    category: "Bicycle",
+    src: car4,
+    title: "Silent Form",
+    caption: "Electric sedan in a clean studio environment",
+    category: "Electric",
     span: true,
   },
   {
-    src: bike5,
-    title: "City Volt",
-    caption: "Electric city bike against painted walls",
-    category: "Bicycle",
+    src: car5,
+    title: "Coastal Cinque",
+    caption: "Vintage city car against pastel Mediterranean walls",
+    category: "Urban",
   },
   {
-    src: bike6,
-    title: "Heat & Metal",
-    caption: "Engine and exhaust close-up",
+    src: car6,
+    title: "Chrome & Flame",
+    caption: "Polished V8 engine and exhaust detail",
     category: "Detail",
   },
 ];
 
-const filters = ["All", "Motorcycle", "Bicycle", "Detail"] as const;
+const filters = [
+  "All",
+  "Sports",
+  "Classic",
+  "Off-Road",
+  "Electric",
+  "Urban",
+  "Detail",
+] as const;
 
-function BikeGalleryPage() {
+function CarGalleryPage() {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
-  const [active, setActive] = useState<Bike | null>(null);
+  const [active, setActive] = useState<Car | null>(null);
 
   const visible = useMemo(
-    () => (filter === "All" ? bikes : bikes.filter((b) => b.category === filter)),
+    () => (filter === "All" ? cars : cars.filter((c) => c.category === filter)),
     [filter],
   );
 
@@ -96,7 +112,7 @@ function BikeGalleryPage() {
       <section className="relative isolate overflow-hidden">
         <img
           src={hero}
-          alt="Motorcyclist riding a desert highway at dusk"
+          alt="Silver sports car driving a coastal highway at sunset"
           width={1920}
           height={1080}
           className="absolute inset-0 h-full w-full object-cover opacity-70"
@@ -107,11 +123,11 @@ function BikeGalleryPage() {
             Gallery
           </p>
           <h1 className="mt-4 max-w-3xl text-6xl leading-[0.92] text-foreground sm:text-8xl">
-            Bike <span className="text-gradient-ember">Images</span>
+            Car <span className="text-gradient-ember">Images</span>
           </h1>
           <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Machines, roads and details — a curated set of high-resolution bike
-            photography. Tap any frame to view it full size.
+            Machines, roads and details — a curated set of high-resolution
+            automotive photography. Tap any frame to view it full size.
           </p>
         </div>
       </section>
@@ -135,17 +151,17 @@ function BikeGalleryPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((bike) => (
+          {visible.map((car) => (
             <figure
-              key={bike.title}
+              key={car.title}
               className={`group relative cursor-pointer overflow-hidden rounded-2xl border border-border bg-card shadow-lift transition-transform duration-500 hover:-translate-y-1 hover:shadow-glow ${
-                bike.span ? "sm:col-span-2" : ""
+                car.span ? "sm:col-span-2" : ""
               }`}
-              onClick={() => setActive(bike)}
+              onClick={() => setActive(car)}
             >
               <img
-                src={bike.src}
-                alt={bike.caption}
+                src={car.src}
+                alt={car.caption}
                 width={1280}
                 height={960}
                 loading="lazy"
@@ -153,14 +169,14 @@ function BikeGalleryPage() {
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-card via-card/80 to-transparent p-5 pt-14">
                 <figcaption>
-                  <h3 className="text-2xl text-foreground">{bike.title}</h3>
+                  <h3 className="text-2xl text-foreground">{car.title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {bike.caption}
+                    {car.caption}
                   </p>
                 </figcaption>
               </div>
               <span className="absolute right-4 top-4 rounded-full bg-background/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-primary backdrop-blur">
-                {bike.category}
+                {car.category}
               </span>
             </figure>
           ))}
