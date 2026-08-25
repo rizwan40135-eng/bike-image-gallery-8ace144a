@@ -98,6 +98,13 @@ const filters = [
   "Detail",
 ] as const;
 
+const filterCounts: Record<(typeof filters)[number], number> = (() => {
+  const counts = { All: cars.length } as Record<(typeof filters)[number], number>;
+  for (const f of filters) if (f !== "All") counts[f] = 0;
+  for (const car of cars) counts[car.category] = (counts[car.category] ?? 0) + 1;
+  return counts;
+})();
+
 function CarGalleryPage() {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
   const [active, setActive] = useState<Car | null>(null);
@@ -139,13 +146,22 @@ function CarGalleryPage() {
               key={f}
               onClick={() => setFilter(f)}
               aria-pressed={filter === f}
-              className={`rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-widest transition-colors ${
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-widest transition-all ${
                 filter === f
-                  ? "border-primary bg-primary text-primary-foreground"
+                  ? "border-primary/50 bg-primary/10 text-primary shadow-glow"
                   : "border-border bg-card text-muted-foreground hover:text-foreground"
               }`}
             >
               {f}
+              <span
+                className={`inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-bold ${
+                  filter === f
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {filterCounts[f]}
+              </span>
             </button>
           ))}
         </div>
