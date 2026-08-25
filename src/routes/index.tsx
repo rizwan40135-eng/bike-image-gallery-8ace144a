@@ -88,6 +88,14 @@ const cars: Car[] = [
   },
 ];
 
+const filterCounts = useMemo(() => {
+  const counts: Record<string, number> = { All: cars.length };
+  for (const car of cars) {
+    counts[car.category] = (counts[car.category] ?? 0) + 1;
+  }
+  return counts;
+}, []);
+
 const filters = [
   "All",
   "Sports",
