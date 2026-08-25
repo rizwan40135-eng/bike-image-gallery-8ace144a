@@ -88,14 +88,6 @@ const cars: Car[] = [
   },
 ];
 
-const filterCounts = useMemo(() => {
-  const counts: Record<string, number> = { All: cars.length };
-  for (const car of cars) {
-    counts[car.category] = (counts[car.category] ?? 0) + 1;
-  }
-  return counts;
-}, []);
-
 const filters = [
   "All",
   "Sports",
@@ -105,6 +97,13 @@ const filters = [
   "Urban",
   "Detail",
 ] as const;
+
+const filterCounts: Record<(typeof filters)[number], number> = (() => {
+  const counts = { All: cars.length } as Record<(typeof filters)[number], number>;
+  for (const f of filters) if (f !== "All") counts[f] = 0;
+  for (const car of cars) counts[car.category] = (counts[car.category] ?? 0) + 1;
+  return counts;
+})();
 
 function CarGalleryPage() {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
